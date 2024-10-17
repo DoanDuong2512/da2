@@ -1,93 +1,124 @@
 package com.duongthuy.project.service;
 
-import com.duong.restful_api.entity.User;
-import com.duong.restful_api.exception.NotFoundException;
-import com.duong.restful_api.model.dto.UserDto;
-import com.duong.restful_api.model.request.CreateUserRequest;
-import com.duong.restful_api.model.request.UpdateUserRequest;
-import com.duong.restful_api.repository.UserRepository;
+import com.duongthuy.project.dto.UserDto;
+import com.duongthuy.project.dto.request.RegisterCustomerRequest;
+import com.duongthuy.project.dto.request.RegisterSupplierRequest;
+import com.duongthuy.project.dto.request.UpdateCustomerRequest;
+import com.duongthuy.project.dto.request.UpdateSupplierRequest;
+import com.duongthuy.project.dto.response.ErrorResponseDto;
+import com.duongthuy.project.entity.Role;
+import com.duongthuy.project.entity.User;
+import com.duongthuy.project.repository.RoleRepository;
+import com.duongthuy.project.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
 
-    public List<UserDto> getListUsers() {
-        List<User> users = userRepository.findAll();
-        List<UserDto> result = new ArrayList<>();
-        for (User user : users) {
-            result.add(modelMapper.map(user, UserDto.class));
-        }
-        return result;
-    }
+    private final ModelMapper modelMapper;
 
-    public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            throw new NotFoundException("User not found");
-        }
-        return modelMapper.map(user, UserDto.class);
-    }
-
-    public List<UserDto> searchUser(String keyword) {
-        List<User> users = userRepository.findByNameContaining(keyword);
-        List<UserDto> result = new ArrayList<>();
-        for (User user : users) {
-            result.add(modelMapper.map(user, UserDto.class));
-        }
-        return result;
-    }
-
-    public UserDto createUser(CreateUserRequest req) {
+    public ErrorResponseDto registerCustomer(RegisterCustomerRequest request){
         User user = new User();
-        user.setUsername(req.getUsername());
-        user.setEmail(req.getEmail());
-        user.setPhone(req.getPhone());
-        user.setContactInfo(req.getContactInfo());
-        user.setPassword(req.getPassword());
-        user.setFullName(req.getFullName());
-        // Ensure you have a role in the CreateUserRequest
-        user.setRole(req.getRole());
-        user.setSupplierType(req.getSupplierType());
-        user.setSupplierIntro(req.getSupplierIntro());
-        user.setSupplierAddress(req.getSupplierAddress());
-        userRepository.save(user);
-        return modelMapper.map(user, UserDto.class);
-    }
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+        user.setPhone(request.getPhone());
+        user.setEmail(request.getEmail());
+        user.setFullName(request.getFullName());
 
-    public UserDto updateUser(Long id, UpdateUserRequest req) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            throw new NotFoundException("User not found");
+        Role role = roleRepository.findByRoleCode("CUS").orElse(null);
+        if(role == null){
+            throw new RuntimeException("Role not found");
         }
-        user.setUsername(req.getUsername());
-        user.setEmail(req.getEmail());
-        user.setPhone(req.getPhone());
-        user.setContactInfo(req.getContactInfo());
-        user.setPassword(req.getPassword());
-        user.setFullName(req.getFullName());
-        user.setRole(req.getRole());
-        user.setSupplierType(req.getSupplierType());
-        user.setSupplierIntro(req.getSupplierIntro());
-        user.setSupplierAddress(req.getSupplierAddress());
         userRepository.save(user);
-        return modelMapper.map(user, UserDto.class);
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+        errorResponseDto.setMessage("Register successfully");
+        errorResponseDto.setErrorCode("00");
+        errorResponseDto.setSuccess(true);
+        return errorResponseDto;
     }
 
-    public void deleteUser(Long id) {
+    public ErrorResponseDto registerSupplier(RegisterSupplierRequest request){
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+        user.setPhone(request.getPhone());
+        user.setEmail(request.getEmail());
+        user.setFullName(request.getFullName());
+        user.setContactInfo(request.getContactInfo());
+        user.setSupplierAddress(request.getSupplierAddress());
+        user.setSupplierType(request.getSupplierType());
+        user.setSupplierAddress(request.getSupplierAddress());
+        Role role = roleRepository.findByRoleCode("SUP").orElse(null);
+        if(role == null){
+            throw new RuntimeException("Role not found");
+        }
+        userRepository.save(user);
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+        errorResponseDto.setMessage("Register successfully");
+        errorResponseDto.setErrorCode("00");
+        errorResponseDto.setSuccess(true);
+        return errorResponseDto;
+    }
+
+    public UserDto findUserById(Integer id){
         User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            throw new NotFoundException("User not found");
+        if(user == null){
+            return null;
+        }
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        return userDto;
+    }
+
+    public List<UserDto> findUserByRoleCode(String roleCode){
+        List<User> users = userRepository.findUserByRoleCode(roleCode);
+        List<UserDto> userDtoList = users.stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .toList();
+        return userDtoList;
+    }
+
+    public ErrorResponseDto updateCustomer(UpdateCustomerRequest updateCustomerRequest, Integer id){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return new ErrorResponseDto(false, "User not found", "01");
+        }
+        user.setFullName(updateCustomerRequest.getFullName());
+        user.setPhone(updateCustomerRequest.getPhone());
+        user.setEmail(updateCustomerRequest.getEmail());
+        userRepository.save(user);
+        return new ErrorResponseDto(true, "Update successfully", "00");
+    }
+
+    public ErrorResponseDto updateSupplier(UpdateSupplierRequest updateSupplierRequest, Integer id){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return new ErrorResponseDto(false, "User not found", "01");
+        }
+        user.setFullName(updateSupplierRequest.getFullName());
+        user.setPhone(updateSupplierRequest.getPhone());
+        user.setEmail(updateSupplierRequest.getEmail());
+        user.setContactInfo(updateSupplierRequest.getContactInfo());
+        user.setSupplierAddress(updateSupplierRequest.getSupplierAddress());
+        user.setSupplierType(updateSupplierRequest.getSupplierType());
+        userRepository.save(user);
+        return new ErrorResponseDto(true, "Update successfully", "00");
+    }
+
+    public ErrorResponseDto deleteUser(Integer id){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null){
+            return new ErrorResponseDto(false, "User not found", "01");
         }
         userRepository.delete(user);
+        return new ErrorResponseDto(true, "Delete successfully", "00");
     }
 }
