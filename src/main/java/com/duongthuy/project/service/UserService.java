@@ -44,6 +44,7 @@ public class UserService {
         if(role == null){
             throw new RuntimeException("Role not found");
         }
+        user.setRole(role);
         userRepository.save(user);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto();
@@ -68,6 +69,7 @@ public class UserService {
         if(role == null){
             throw new RuntimeException("Role not found");
         }
+        user.setRole(role);
         userRepository.save(user);
         ErrorResponseDto errorResponseDto = new ErrorResponseDto();
         errorResponseDto.setMessage("Register successfully");

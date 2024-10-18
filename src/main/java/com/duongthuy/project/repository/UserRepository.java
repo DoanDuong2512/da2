@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query(value = "select u.* from users u left join roles r on u.role_id = r.id where u.role_code = :roleCode", nativeQuery = true)
+    @Query(value = "select u.* from users u left join roles r on u.role_id = r.id where r.role_code = :roleCode", nativeQuery = true)
     List<User> findUserByRoleCode(String roleCode);
 
     @Query(value = "select * from users where username = :username", nativeQuery = true)
