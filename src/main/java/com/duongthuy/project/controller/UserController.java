@@ -1,10 +1,8 @@
 package com.duongthuy.project.controller;
 import com.duongthuy.project.dto.UserDto;
-import com.duongthuy.project.dto.request.RegisterCustomerRequest;
-import com.duongthuy.project.dto.request.RegisterSupplierRequest;
-import com.duongthuy.project.dto.request.UpdateCustomerRequest;
-import com.duongthuy.project.dto.request.UpdateSupplierRequest;
+import com.duongthuy.project.dto.request.*;
 import com.duongthuy.project.dto.response.ErrorResponseDto;
+import com.duongthuy.project.dto.response.LoginResponse;
 import com.duongthuy.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +53,10 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(userService.authenticate(request));
+    }
 }
 
