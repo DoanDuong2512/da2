@@ -3,9 +3,12 @@ import com.duongthuy.project.dto.UserDto;
 import com.duongthuy.project.dto.request.*;
 import com.duongthuy.project.dto.response.ErrorResponseDto;
 import com.duongthuy.project.dto.response.LoginResponse;
+import com.duongthuy.project.entity.User;
 import com.duongthuy.project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,6 +60,15 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(userService.authenticate(request));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User currentUser = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(currentUser);
     }
 }
 
