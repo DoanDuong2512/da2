@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,10 +21,12 @@ public class Voucher {
     @Column(name = "voucher_id")
     private Integer id;
 
-    @JoinColumn(name = "category_category_id", referencedColumnName = "voucher_category_id")
+    @ManyToOne
+    @JoinColumn(name = "category_category_id")
     private VoucherCategory category;
 
-    @JoinColumn(name = "supplier_id", referencedColumnName = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private User supplier;
 
     @Column(name = "usage_conditions")
@@ -48,5 +51,30 @@ public class Voucher {
     private Integer ratingsCount;
 
     @Column(name = "average_rating")
+    private BigDecimal averageRating;
+
+    @Column(name = "quantity_available")
+    private Integer quantityAvailable;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @Column(name = "discount_percent")
+    private BigDecimal discountPercent;
+
+    @Column(name = "max_discount_amount")
+    private BigDecimal maxDiscountAmount;
+
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "quantity_sold")
+    private Integer quantitySold;
+
+    @Column(name = "is_active")
+    private Boolean isActive; // Use Boolean instead of TINYINT(1)
 }
 

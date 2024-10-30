@@ -1,6 +1,7 @@
 package com.duongthuy.project.dto;
 
 import com.duongthuy.project.entity.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -9,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class UserDto {
+    @JsonIgnore
     private Integer id;
 
     private String email;

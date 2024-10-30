@@ -1,9 +1,9 @@
 package com.duongthuy.project.repository;
 
-import com.duongthuy.project.entity.Voucher;
+import com.duongthuy.project.entity.TransactionDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VoucherRepository extends JpaRepository<Voucher, Integer> {
+public interface TransactionDetailRepository extends JpaRepository<TransactionDetail, Integer> {
 }

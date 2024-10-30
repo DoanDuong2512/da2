@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class CreateVoucherRequest {
+public class UpdateVoucherRequest {
     private Integer voucherCategoryId;
 
     private String usageConditions; // Điều kiện sử dụng
@@ -32,5 +32,4 @@ public class CreateVoucherRequest {
     private BigDecimal maxDiscountAmount; // Số tiền giảm giá tối đa cho voucher
 
     private Integer price; // Giá voucher
-
 }

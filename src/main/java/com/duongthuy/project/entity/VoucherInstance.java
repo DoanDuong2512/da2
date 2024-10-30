@@ -19,10 +19,12 @@ public class VoucherInstance {
     @Column(name = "voucher_instance_id")
     private Integer id;
 
-    @JoinColumn(name = "voucher_id", referencedColumnName = "voucher_id")
+    @ManyToOne
+    @JoinColumn(name = "voucher_id")
     private Voucher voucher;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "voucher_code", length = 50)

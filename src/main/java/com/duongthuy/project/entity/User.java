@@ -51,6 +51,7 @@ public class User implements UserDetails {
     @Column(name = "supplier_address")
     private String supplierAddress;
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
