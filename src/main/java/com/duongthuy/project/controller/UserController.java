@@ -56,7 +56,6 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(userService.authenticate(request));
