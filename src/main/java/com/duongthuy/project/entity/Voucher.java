@@ -69,12 +69,19 @@ public class Voucher {
     private BigDecimal maxDiscountAmount;
 
     @Column(name = "price")
-    private Integer price;
+    private BigDecimal price;
 
     @Column(name = "quantity_sold")
     private Integer quantitySold;
 
     @Column(name = "is_active")
     private Boolean isActive; // Use Boolean instead of TINYINT(1)
+
+    public Integer getSupplierId() {
+        return supplier != null ? supplier.getId() : null;
+    }
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }
 

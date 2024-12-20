@@ -122,11 +122,15 @@ public class VoucherService {
         Optional<Voucher> optionalVoucher = voucherRepository.findById(id);
         return optionalVoucher.map(voucher -> modelMapper.map(voucher, VoucherDto.class)).orElse(null);
     }
-
+    public VoucherDto findVoucherByKey(Integer id) {
+        Optional<Voucher> optionalVoucher = voucherRepository.findById(id);
+        return optionalVoucher.map(voucher -> modelMapper.map(voucher, VoucherDto.class)).orElse(null);
+    }
     public Page<VoucherDto> findAllVouchers(
             int page,
             int size
-    ) {
+    )
+    {
         Pageable pageable = PageRequest.of(page, size);
         return voucherRepository.findAll(pageable).map(voucher -> modelMapper.map(voucher, VoucherDto.class));
     }

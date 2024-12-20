@@ -6,7 +6,6 @@ public class ErrorResponseDto {
     private String errorCode;
     private Object data;
 
-
     public ErrorResponseDto() {
     }
 

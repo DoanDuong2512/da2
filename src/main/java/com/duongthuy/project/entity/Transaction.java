@@ -18,7 +18,9 @@ public class Transaction {
 
     @Column(name = "transaction_date")
     private LocalDate transactionDate; // Ngày giao dịch
-
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
     @Column(name = "amount_paid")
     private BigDecimal amountPaid; // Số tiền đã thanh toán
 
@@ -32,4 +34,18 @@ public class Transaction {
 
     @Column(name = "payment_method")
     private String paymentMethod; // Phương thức thanh toán
+
+    public void setSupplierId(Integer id) {
+        if (this.supplier == null) {
+            this.supplier = new User();
+        }
+        this.supplier.setId(id);
+    }
+
+    public void setCustomerId(Integer id) {
+        if (this.customer == null) {
+            this.customer = new User();
+        }
+        this.customer.setId(id);
+    }
 }

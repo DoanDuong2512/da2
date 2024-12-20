@@ -9,5 +9,4 @@ import org.springframework.stereotype.Service;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-
 }
