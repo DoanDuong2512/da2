@@ -16,11 +16,11 @@ import java.util.List;
 public class TransactionController {
     private final TransactionService transactionService;
     @PostMapping("/voucher/{voucherId}")
-    public ResponseEntity<Void> processVoucherTransaction(
+    public ResponseEntity<String> processVoucherTransaction(
             @PathVariable(name = "voucherId") Integer voucherId,
             @RequestBody VoucherTransactionRequest request) {
         transactionService.processVoucherTransaction(voucherId, request);
-        return ResponseEntity.ok().build(); // Trả về trạng thái 200 OK, không có nội dung
+        return ResponseEntity.ok("create successfully"); // Trả về trạng thái 200 OK, không có nội dung
     }
 
 

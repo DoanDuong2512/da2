@@ -45,13 +45,15 @@ public class TransactionService {
                 .orElseThrow(() -> new BusinessException("Customer not found"));
         User supplier = userRepository.findById(voucher.getSupplierId())
                 .orElseThrow(() -> new BusinessException("Supplier not found"));
-
+        System.out.println("dsadasdasdasdas"+voucher);
+        System.out.println(customer);
+        System.out.println(supplier);
 
         Transaction transaction = new Transaction();
         transaction.setTransactionDate(LocalDateTime.now().toLocalDate());
         transaction.setAmountPaid(voucher.getPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
-        transaction.setSupplierId(supplier.getId());
-        transaction.setCustomerId(customer.getId());
+        transaction.setSupplier(supplier);
+        transaction.setCustomer(customer);
         transaction.setPaymentMethod(request.getPaymentMethod());
         transactionRepository.save(transaction);
 //
