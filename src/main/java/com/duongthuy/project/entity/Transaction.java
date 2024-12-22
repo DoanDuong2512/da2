@@ -48,4 +48,7 @@ public class Transaction {
         }
         this.customer.setId(id);
     }
+    public Integer getId(Integer id) {
+        return this.transactionId;
+    }
 }

@@ -22,4 +22,13 @@ public class TransactionDetail {
 
     @Column(name = "quantity")
     private Integer quantity; // Số lượng voucher
+
+    public void setVoucherId(Integer id) {
+        this.voucher = new Voucher();
+        this.voucher.setId(id);
+    }
+    public void setTransactionDetailId(Integer id) {
+        this.transaction = new Transaction();
+        this.transaction.getId(id);
+    }
 }
