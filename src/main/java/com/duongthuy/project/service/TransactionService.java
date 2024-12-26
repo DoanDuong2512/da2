@@ -34,9 +34,10 @@ public class TransactionService {
 
     @Transactional
     public void processVoucherTransaction(Integer voucherId, VoucherTransactionRequest request) {
+        System.out.println("something" +voucherId);
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new BusinessException("Voucher not found"));
-
+        System.out.println("alksdjfa;lksjdf");
         if (!voucher.getIsActive() || voucher.getQuantityAvailable() < request.getQuantity()) {
             throw new BusinessException("Voucher is not available or quantity is insufficient");
         }
@@ -56,12 +57,12 @@ public class TransactionService {
         transaction.setCustomer(customer);
         transaction.setPaymentMethod(request.getPaymentMethod());
         transactionRepository.save(transaction);
-//
-//        TransactionDetail transactionDetail = new TransactionDetail();
-//        transactionDetail.setTransactionDetailId(transaction.getId(id)); // Lấy ID từ Transaction
-//        transactionDetail.setQuantity(request.getQuantity());
-//        transactionDetail.setVoucherId(voucher.getId());
-//        transactionDetailRepository.save(transactionDetail);
+
+        TransactionDetail transactionDetail = new TransactionDetail();
+        transactionDetail.setTransaction(transaction);
+        transactionDetail.setQuantity(request.getQuantity());
+        transactionDetail.setVoucherId(voucher.getId());
+        transactionDetailRepository.save(transactionDetail);
 
 
         for (int i = 0; i < request.getQuantity(); i++) {
@@ -78,6 +79,7 @@ public class TransactionService {
         // Update voucher quantity
         voucher.setQuantityAvailable(voucher.getQuantityAvailable() - request.getQuantity());
         voucherRepository.save(voucher);
+        System.out.println("nah"+voucher);
     }
 
     public List<Transaction> getAllTransactions() {

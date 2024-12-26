@@ -1,4 +1,3 @@
-// TransactionController.java
 package com.duongthuy.project.controller;
 
 import com.duongthuy.project.dto.request.VoucherTransactionRequest;
@@ -7,6 +6,8 @@ import com.duongthuy.project.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+
 
 import java.util.List;
 
@@ -19,8 +20,14 @@ public class TransactionController {
     public ResponseEntity<String> processVoucherTransaction(
             @PathVariable(name = "voucherId") Integer voucherId,
             @RequestBody VoucherTransactionRequest request) {
-        transactionService.processVoucherTransaction(voucherId, request);
-        return ResponseEntity.ok("create successfully"); // Trả về trạng thái 200 OK, không có nội dung
+        System.out.println(request);
+        try {
+            transactionService.processVoucherTransaction(voucherId, request);
+            return ResponseEntity.ok("Purchase voucher successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing voucher transaction");
+        }
     }
 
 

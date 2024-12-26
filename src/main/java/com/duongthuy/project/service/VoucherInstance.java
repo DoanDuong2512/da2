@@ -13,5 +13,4 @@ public class VoucherInstance {
     private Date expiryDate;
     private boolean isRedeemed;
 
-    // Getters and Setters
 }

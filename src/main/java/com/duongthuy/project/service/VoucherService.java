@@ -50,16 +50,15 @@ public class VoucherService {
             return new ErrorResponseDto(false, "Supplier not found", "01");
         }
 
-        // Set default values or initialize fields
-        voucher.setRatingsCount(0); // Default ratings count
-        voucher.setAverageRating(BigDecimal.ZERO); // Default average rating
-        voucher.setQuantityAvailable(request.getQuantityAvailable()); // Set available quantity
-        voucher.setQuantitySold(0); // Initially sold quantity is 0
-        voucher.setIsActive(true); // Set active status by default
-        voucher.setStartDate(request.getStartDate()); // Set current date as start date if not provided
-        voucher.setEndDate(request.getEndDate()); // Use provided end date
-        voucher.setSupplier(supplier); // Set supplier
-        voucher.setCategory(voucherCategory); // Set category
+        voucher.setRatingsCount(0);
+        voucher.setAverageRating(BigDecimal.ZERO);
+        voucher.setQuantityAvailable(request.getQuantityAvailable());
+        voucher.setQuantitySold(0);
+        voucher.setIsActive(true);
+        voucher.setStartDate(request.getStartDate());
+        voucher.setEndDate(request.getEndDate());
+        voucher.setSupplier(supplier);
+        voucher.setCategory(voucherCategory);
 
         voucherRepository.save(voucher);
 
