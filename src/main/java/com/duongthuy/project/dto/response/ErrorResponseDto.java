@@ -15,7 +15,6 @@ public class ErrorResponseDto {
         this.errorCode = errorCode;
     }
 
-    // Getters and Setters
 
     public boolean isSuccess() {
         return success;

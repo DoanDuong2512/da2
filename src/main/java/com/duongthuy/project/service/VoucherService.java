@@ -17,12 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
-
+import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -121,10 +121,19 @@ public class VoucherService {
         Optional<Voucher> optionalVoucher = voucherRepository.findById(id);
         return optionalVoucher.map(voucher -> modelMapper.map(voucher, VoucherDto.class)).orElse(null);
     }
-    public VoucherDto findVoucherByKey(Integer id) {
-        Optional<Voucher> optionalVoucher = voucherRepository.findById(id);
-        return optionalVoucher.map(voucher -> modelMapper.map(voucher, VoucherDto.class)).orElse(null);
+//    public VoucherDto findVoucherByKeyword(String keyword) {
+//        Optional<Voucher> optionalVoucher = voucherRepository.findByKeyword(keyword);
+//        return optionalVoucher.map(voucher -> modelMapper.map(voucher, VoucherDto.class)).orElse(null);
+//    }
+public List<VoucherDto> findVoucherByKeyword(String keyword) {
+    List<Voucher> vouchers = voucherRepository.findByKeyword(keyword);
+    List<VoucherDto> result = new ArrayList<>();
+    for (Voucher voucher : vouchers) {
+        result.add(modelMapper.map(voucher, VoucherDto.class));
     }
+    return result;
+}
+
     public Page<VoucherDto> findAllVouchers(
             int page,
             int size

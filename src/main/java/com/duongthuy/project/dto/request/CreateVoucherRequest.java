@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class CreateVoucherRequest {
     private Integer voucherCategoryId;
 
-    private String usageConditions; // Điều kiện sử dụng
+    private String usageConditions;
 
     private BigDecimal minOrderAmount; // Số tiền tối thiểu cho đơn hàng để áp dụng voucher
 

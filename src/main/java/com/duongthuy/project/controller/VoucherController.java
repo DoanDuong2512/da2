@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/vouchers")
@@ -34,6 +35,12 @@ public class VoucherController {
     @GetMapping("/{id}")
     public ResponseEntity<VoucherDto> findVoucherById(@PathVariable Integer id) {
         return ResponseEntity.ok(voucherService.findVoucherById(id));
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<VoucherDto>> findVoucherByKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok(voucherService.findVoucherByKeyword(keyword));
     }
 
     @PostMapping

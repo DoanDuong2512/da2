@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateVoucherCategoryDto {
-    private String voucherCategoryName; // Tên loại voucher
-    private String categoryDescription; // Mô tả loại voucher
+    private String voucherCategoryName;
+    private String categoryDescription;
 }
