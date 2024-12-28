@@ -33,39 +33,39 @@ public class TransactionService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void processVoucherTransaction(Integer voucherId, VoucherTransactionRequest request) {
+    public void processVoucherTransaction(Integer voucherId, Integer customerId, Integer quantity, String paymentMethod, Integer discount) {
         System.out.println("something" +voucherId);
         Voucher voucher = voucherRepository.findById(voucherId)
                 .orElseThrow(() -> new BusinessException("Voucher not found"));
-        System.out.println("alksdjfa;lksjdf");
-        if (!voucher.getIsActive() || voucher.getQuantityAvailable() < request.getQuantity()) {
+        if (!voucher.getIsActive() || voucher.getQuantityAvailable() < quantity) {
             throw new BusinessException("Voucher is not available or quantity is insufficient");
         }
 
-        User customer = userRepository.findById(request.getCustomerId())
+        User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new BusinessException("Customer not found"));
         User supplier = userRepository.findById(voucher.getSupplierId())
                 .orElseThrow(() -> new BusinessException("Supplier not found"));
-        System.out.println("dsadasdasdasdas"+voucher);
-        System.out.println(customer);
-        System.out.println(supplier);
 
         Transaction transaction = new Transaction();
         transaction.setTransactionDate(LocalDateTime.now().toLocalDate());
-        transaction.setAmountPaid(voucher.getPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
+        transaction.setAmountPaid(voucher.getPrice()
+            .multiply(BigDecimal.valueOf(quantity))
+            .multiply(BigDecimal.valueOf(100 - discount))
+            .divide(BigDecimal.valueOf(100))
+        );
         transaction.setSupplier(supplier);
         transaction.setCustomer(customer);
-        transaction.setPaymentMethod(request.getPaymentMethod());
+        transaction.setPaymentMethod(paymentMethod);
         transactionRepository.save(transaction);
 
         TransactionDetail transactionDetail = new TransactionDetail();
         transactionDetail.setTransaction(transaction);
-        transactionDetail.setQuantity(request.getQuantity());
+        transactionDetail.setQuantity(quantity);
         transactionDetail.setVoucherId(voucher.getId());
         transactionDetailRepository.save(transactionDetail);
 
 
-        for (int i = 0; i < request.getQuantity(); i++) {
+        for (int i = 0; i < quantity; i++) {
             VoucherInstance instance = new VoucherInstance();
             instance.setVoucher(voucher);
             instance.setUser(customer);
@@ -77,7 +77,7 @@ public class TransactionService {
         }
 
         // Update voucher quantity
-        voucher.setQuantityAvailable(voucher.getQuantityAvailable() - request.getQuantity());
+        voucher.setQuantityAvailable(voucher.getQuantityAvailable() - quantity);
         voucherRepository.save(voucher);
         System.out.println("nah"+voucher);
     }
@@ -85,4 +85,6 @@ public class TransactionService {
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
+
+
 }
