@@ -1,6 +1,7 @@
 package com.duongthuy.project.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,8 @@ public class FlashSaleParticipant {
 
     @ManyToOne
     private User user;
+
+    private LocalDateTime timeJoined;
 
     @Column(name = "status")
     private String status;
