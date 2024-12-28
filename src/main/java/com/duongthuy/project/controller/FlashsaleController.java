@@ -21,6 +21,7 @@ public class FlashsaleController {
 
     @PostMapping("/participate")
     public ResponseEntity<ErrorResponseDto> participateInFlashSale(@RequestBody ParticipateFlashSaleRequest request) {
+
         return ResponseEntity.ok(flashSaleService.participateInFlashSale(request));
     }
 }

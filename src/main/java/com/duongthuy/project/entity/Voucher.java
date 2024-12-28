@@ -83,5 +83,9 @@ public class Voucher {
     public void setActive(boolean active) {
         isActive = active;
     }
+    public BigDecimal getDiscount() {
+        return discountPercent;
+    }
+
 }
 

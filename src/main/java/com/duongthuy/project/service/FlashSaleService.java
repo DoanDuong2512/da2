@@ -30,7 +30,6 @@ public class FlashSaleService {
     public ErrorResponseDto createFlashSale(CreateFlashSaleRequest request) {
         Voucher voucher = voucherRepository.findById(request.getVoucherId())
                 .orElseThrow(() -> new BusinessException("Voucher not found"));
-
         FlashSale flashSale = new FlashSale();
         flashSale.setVoucher(voucher);
         flashSale.setDiscount(request.getDiscount());
