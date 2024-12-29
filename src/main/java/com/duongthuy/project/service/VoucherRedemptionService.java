@@ -1,7 +1,7 @@
 package com.duongthuy.project.service;
 
 import com.duongthuy.project.dto.request.RedeemVoucherRequest;
-import com.duongthuy.project.dto.response.VoucherRedemptionResponse;
+import com.duongthuy.project.dto.response.VoucherInstanceResponse;
 import com.duongthuy.project.entity.VoucherInstance;
 import com.duongthuy.project.entity.VoucherRedemption;
 import com.duongthuy.project.repository.VoucherInstanceRepository;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +21,12 @@ public class VoucherRedemptionService {
     private final VoucherRedemptionRepository voucherRedemptionRepository;
 
     @Transactional
-    public VoucherRedemptionResponse redeemVoucher(RedeemVoucherRequest request) {
+    public VoucherInstanceResponse redeemVoucher(RedeemVoucherRequest request) {
         VoucherInstance voucherInstance = voucherInstanceRepository.findByVoucherCode(request.getVoucherCode())
                 .orElseThrow(() -> new RuntimeException("Voucher not found"));
 
         if (!"ACTIVE".equals(voucherInstance.getStatus())) {
-            return new VoucherRedemptionResponse("This voucher has been used", null);
+            throw new RuntimeException("This voucher has been used");
         }
 
         BigDecimal initialAmount = new BigDecimal(request.getInitialAmount());
@@ -44,6 +45,9 @@ public class VoucherRedemptionService {
         voucherInstance.setStatus("Used");
         voucherInstanceRepository.save(voucherInstance);
 
-        return new VoucherRedemptionResponse("Voucher redeemed successfully", voucherRedemption);
+        return new VoucherInstanceResponse(voucherInstance.getVoucherCode(), voucherInstance.getPurchaseAt());
+    }
+    public List<VoucherRedemption> getAllRedeemedVouchers() {
+        return voucherRedemptionRepository.findAll();
     }
 }
